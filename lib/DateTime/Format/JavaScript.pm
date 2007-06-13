@@ -30,14 +30,19 @@ use constant RE_MONTHS => qr/@{[ join "|", MONTHS ]}/;
 use DateTime::Format::Builder (
     parsers => {
         parse_datetime => [
-            {
+            {  # UTC for IE style, GMT for Mozilla style
                 params => [qw/ month day hour minute second time_zone year /],
                 regex  => qr/^@{[RE_WDAYS]} (@{[RE_MONTHS]}) (\d{1,2}) (\d\d):(\d\d):(\d\d) (?:UTC|GMT)([-+]\d{4}) (\d{4})$/,
                 postprocess => \&_fix_month,
             },
-            {
+            {  # For IE (when Date constructor called as function, it returns string representing current time without time-zone).
                 params => [qw/ month day hour minute second year /],
                 regex  => qr/^@{[RE_WDAYS]} (@{[RE_MONTHS]}) (\d{1,2}) (\d\d):(\d\d):(\d\d) (\d{4})$/,
+                postprocess => \&_fix_month,
+            },
+            {  # For Opera 9
+                params => [qw/ day month year hour minute second time_zone /],
+                regex  => qr/^@{[RE_WDAYS]}, (\d{1,2}) (@{[RE_MONTHS]}) (\d{4}) (\d\d):(\d\d):(\d\d) GMT([-+]\d{4})$/,
                 postprocess => \&_fix_month,
             },
         ],
