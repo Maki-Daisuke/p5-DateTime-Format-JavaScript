@@ -3,8 +3,9 @@ package DateTime::Format::JavaScript;
 use warnings;
 use strict;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
+use Carp;
 use DateTime::TimeZone;
 
 use constant WDAYS  => qw/Mon Tue Wed Thu Fri Sat Sun/;
@@ -12,43 +13,55 @@ use constant MONTHS => qw/Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec/;
 use constant RE_WDAYS  => qr/@{[ join "|", WDAYS ]}/;
 use constant RE_MONTHS => qr/@{[ join "|", MONTHS ]}/;
 
-{
-    my %mon2num;
-    my $i = 1;
-    foreach ( MONTHS ) {
-        $mon2num{$_} = $i++;
-    }
-    
-    sub _fix_month {
-        my %args = @_;
-        my $p = $args{parsed};
-        $p->{month} = $mon2num{$p->{month}};
-        return 1;
-    }
+my %mon2num;
+my $i = 1;
+foreach ( MONTHS ) {
+    $mon2num{$_} = $i++;
 }
 
-use DateTime::Format::Builder (
-    parsers => {
-        parse_datetime => [
-            {  # UTC for IE style, GMT for Mozilla style
-                params => [qw/ month day hour minute second time_zone year /],
-                regex  => qr/^@{[RE_WDAYS]} (@{[RE_MONTHS]}) (\d{1,2}) (\d\d):(\d\d):(\d\d) (?:UTC|GMT)([-+]\d{4}) (\d{4})$/,
-                postprocess => \&_fix_month,
-            },
-            {  # For IE (when Date constructor called as function, it returns string representing current time without time-zone).
-                params => [qw/ month day hour minute second year /],
-                regex  => qr/^@{[RE_WDAYS]} (@{[RE_MONTHS]}) (\d{1,2}) (\d\d):(\d\d):(\d\d) (\d{4})$/,
-                postprocess => \&_fix_month,
-            },
-            {  # For Opera 9
-                params => [qw/ day month year hour minute second time_zone /],
-                regex  => qr/^@{[RE_WDAYS]}, (\d{1,2}) (@{[RE_MONTHS]}) (\d{4}) (\d\d):(\d\d):(\d\d) GMT([-+]\d{4})$/,
-                postprocess => \&_fix_month,
-            },
-        ],
-    }
-);
 
+sub parse_datetime {
+    my $self = shift;
+    local $_ = shift;
+    my %args;
+    pos = 0;
+    /^\s*/gc;
+    while ( pos() < length ) {
+        not exists $args{wday}       and  /\G(@{[RE_WDAYS]})/gc  and  do{
+            $args{wday} = 1;
+            next;
+        };
+        not exists $args{month}      and  /\G(@{[RE_MONTHS]})/gc  and  do{
+            $args{month} = $mon2num{$1};
+            next;
+        };
+        not exists $args{year}       and  /\G(\d{4})/gc  and  do{
+            $args{year} = $1;
+            next;
+        };
+        not exists $args{hour}       and
+        not exists $args{minute}     and
+        not exists $args{second}     and  /\G(\d{2}):(\d{2}):(\d{2})/gc  and  do{
+            $args{hour}   = $1;
+            $args{minute} = $2;
+            $args{second} = $3;
+            next;
+        };
+        not exists $args{day}        and  /\G(\d{1,2})/gc  and  do{
+            $args{day} = $1;
+            next;
+        };
+        not exists $args{time_zone}  and  /\G(?:UTC|GMT)([-+]\d{4})/gc  and  do{
+            $args{time_zone} = $1;
+            next;
+        };
+        croak "Invalid date format: $_";
+    } continue {
+        /\G[\s,]*/gc;
+    }
+    delete $args{wday};
+    DateTime->new(%args);
+}
 
 sub format_datetime {
     my ($self, $dt) = @_;
