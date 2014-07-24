@@ -18,7 +18,7 @@ use constant RE_MONTHS => qr/@{[ join "|", MONTHS ]}/;
     foreach ( MONTHS ) {
         $mon2num{$_} = $i++;
     }
-    
+
     sub _fix_month {
         my %args = @_;
         my $p = $args{parsed};
@@ -65,6 +65,11 @@ sub format_datetime {
 
 
 
+1;
+__END__
+
+=encoding utf-8
+
 =head1 NAME
 
 DateTime::Format::JavaScript - Parses and formats Date of JavaScript
@@ -76,51 +81,25 @@ DateTime::Format::JavaScript - Parses and formats Date of JavaScript
     my $dt = DateTime::Format::JavaScript->parse_datetime("Wed Jun 13 11:12:17 UTC+0900 2007");
     $dt->set_formatter("DateTime::Format::JavaScript");
 
+=head1 DESCRIPTION
+
+DateTime::Format::JavaScript is ...
+
 =head1 METHODS
 
 =head2 parse_datetime
 
 =head2 format_datetime
 
+=head1 LICENSE
+
+Copyright (C) Daisuke (yet another) Maki.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
 =head1 AUTHOR
 
-Daisuke Maki, C<< <none> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to
-C<bug-datetime-format-javascript at rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=DateTime-Format-JavaScript>.
-I will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
-
-=over 4
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/DateTime-Format-JavaScript>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/DateTime-Format-JavaScript>
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=DateTime-Format-JavaScript>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/DateTime-Format-JavaScript>
-
-=back
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2007 Daisuke Maki, all rights reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+Daisuke (yet another) Maki
 
 =cut
-
-1; # End of DateTime::Format::JavaScript

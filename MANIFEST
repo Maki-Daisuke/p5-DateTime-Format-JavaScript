@@ -1,8 +1,0 @@
-Changes
-MANIFEST
-Makefile.PL
-README
-lib/DateTime/Format/JavaScript.pm
-t/00-load.t
-t/pod-coverage.t
-t/pod.t
