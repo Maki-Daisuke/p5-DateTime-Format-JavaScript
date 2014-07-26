@@ -45,6 +45,11 @@ use DateTime::Format::Builder (
                 regex  => qr/^@{[RE_WDAYS]}, (\d{1,2}) (@{[RE_MONTHS]}) (\d{4}) (\d\d):(\d\d):(\d\d) GMT([-+]\d{4})$/,
                 postprocess => \&_fix_month,
             },
+            {  # Safari 7 / Chrome 36 / Firefox 30
+                params => [qw/ month day year hour minute second time_zone /],
+                regex  => qr/^@{[RE_WDAYS]} (@{[RE_MONTHS]}) (\d{1,2}) (\d{4}) (\d\d):(\d\d):(\d\d) GMT([-+]\d{4})/,
+                postprocess => \&_fix_month,
+            },
         ],
     }
 );
