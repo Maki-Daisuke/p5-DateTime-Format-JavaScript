@@ -55,6 +55,16 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/Maki-Daisuke/p5-DateTime-Format-JavaScript/issues"
+      },
+      "homepage" : "https://github.com/Maki-Daisuke/p5-DateTime-Format-JavaScript",
+      "repository" : {
+         "url" : "https://github.com/Maki-Daisuke/p5-DateTime-Format-JavaScript.git",
+         "web" : "https://github.com/Maki-Daisuke/p5-DateTime-Format-JavaScript"
+      }
+   },
    "version" : "0.01",
    "x_contributors" : [
       "Daisuke (yet another) Maki <maki.daisuke@gmail.com>"
