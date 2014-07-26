@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Maki-Daisuke/p5-DateTime-Format-JavaScript.png?branch=master)](https://travis-ci.org/Maki-Daisuke/p5-DateTime-Format-JavaScript)
 # NAME
 
 DateTime::Format::JavaScript - Parses and formats Date of JavaScript

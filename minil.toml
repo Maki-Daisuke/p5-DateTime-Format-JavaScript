@@ -1,1 +1,2 @@
 name = "DateTime-Format-JavaScript"
+badges = ['travis']
